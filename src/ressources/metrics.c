@@ -45,15 +45,15 @@ int compute_cost(char *cmd)
 double compute_efficiency(int prev[NUM_SENSORS], int cur[NUM_SENSORS])
 {
     double sum     = 0.0;
-    double min_val = DBL_MAX;
+    double max_val = -DBL_MAX;
  
     for (int j = 0; j < NUM_SENSORS; j++) {
         double delta = (double)(prev[j] - cur[j]);
         sum += delta;
-        if (delta < min_val) min_val = delta;
+        if (delta > max_val) max_val = delta;
     }
  
-    if (min_val == DBL_MAX) min_val = 0.0;
+    if (max_val == -DBL_MAX) max_val = 0.0;
  
-    return (sum / NUM_SENSORS) + (2.0 * min_val / NUM_SENSORS);
+    return (sum / NUM_SENSORS) + (2.0 * max_val / NUM_SENSORS);
 }

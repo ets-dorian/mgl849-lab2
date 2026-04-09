@@ -21,7 +21,7 @@ int compute_cost(char *cmd);
  * compute_efficiency - Compute the efficiency of a sequence of commands.
  /*
  /* E_i = (1/N) * Σ_j (prev_j - cur_j)                                
- /*      + (2/N) * min_j (prev_j - cur_j)
+ /*      + (2/N) * max_j (prev_j - cur_j)
  /*   
  /* Un delta positif = la concentration a baissé = action efficace.
  /* Un delta négatif = la fuite empire malgré la réaction.
