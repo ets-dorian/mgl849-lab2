@@ -115,6 +115,16 @@ int choose_action(int gas_idx, alarm_t alarm, gas_state_t *st, char *buf, size_t
             st->active_level = 1;
             return 1;
         }
+        if (st->active_type == ACTION_INJECTION ||
+            (st->active_type == ACTION_VENTILATION && st->active_level >= 2)) {
+            /* Retour de HIGH → MEDIUM : annuler l'action haute et revenir à VL1 */
+            cancel_active(gas_idx, st, cancel_buf, sizeof(cancel_buf));
+            buf_append(buf, buf_size, cancel_buf);
+            buf_append(buf, buf_size, "VL1");
+            st->active_type  = ACTION_VENTILATION;
+            st->active_level = 1;
+            return 1;
+        }
         return 0;
  
     case HIGH:
