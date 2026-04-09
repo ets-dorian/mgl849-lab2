@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include "led_matrix.h"
 #include <stdio.h>
 #include <string.h>
@@ -26,11 +27,23 @@ void* task_display(void* arg) {
         levels[2] = shared->alarm_levels[2];
         pthread_mutex_unlock(&shared->lock);
 
+        /* alarm_t values are ordered: NONE=0 < LOW=1 < MEDIUM=2 < HIGH=3 */
         alarm_t most = NONE;
         for (int i = 0; i < 3; ++i) {
-            int res = led_matrix_set_gas_level(&led_matrix, i, levels[i]);
+            if (levels[i] > most) most = levels[i];
+            int res = led_matrix_set_gas_level(&led_matrix, i, (alarm_level_t)levels[i]);
             if (res == -1){
                 fprintf(stderr, "Can't draw matrix led\n");
+            }
+        }
+
+        if (most != NONE) {
+            led_color_t color = led_color_from_alarm_level((alarm_level_t)most);
+            for (int b = 0; b < 3; b++) {
+                led_matrix_draw(&led_matrix, color);
+                usleep(BLINK_DELAY_US);
+                led_matrix_draw(&led_matrix, COLOR_BLACK);
+                usleep(BLINK_DELAY_US);
             }
         }
     }
