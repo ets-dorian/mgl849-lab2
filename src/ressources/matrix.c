@@ -79,6 +79,8 @@ int led_matrix_draw(led_matrix_t *matrix, led_color_t color){
             *((uint16_t *)(matrix->framebuffer_ptr + location)) = color;
         }
     }
+
+    return 0;
 }
 
 led_color_t led_color_from_alarm_level(alarm_level_t level) {

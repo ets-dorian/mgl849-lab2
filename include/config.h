@@ -33,4 +33,9 @@
 #define BYTES_PER_PIXEL    2   /* RGB565 */
 #define LINE_LENGTH_BYTES  16
 
+/*
+ * Blink delay in microseconds for the LED matrix alarm display
+ */
+#define BLINK_DELAY_US 300000
+
 #endif
